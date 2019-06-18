@@ -42,7 +42,7 @@ These methods have shown to be very powerful in the fields of named entity
 recognition, coreference resolution, part-of-speech tagging and question
 answering, especially in combination with classic word embeddings.
 
-Our paper is based on the work of [Riedl and Padó](http://aclweb.org/anthology/P18-2020)(2018).
+Our paper is based on the work of [Riedl and Padó (2018)](http://aclweb.org/anthology/P18-2020).
 They showed how to build a
 model for German named entity recognition (NER) that performs at the state of
 the art for both contemporary and historical texts. Labeled historical texts
@@ -444,6 +444,7 @@ approaches could be effective with proper hyperparameter tunings:
 * [ ] Include training script
 * [ ] Show how to use our trained language models with *Flair*
 * [ ] Add BibTeX entry
+* [ ] Add link to arXiv pre-print
 
 # Citing
 
