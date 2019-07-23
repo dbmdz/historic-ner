@@ -552,6 +552,20 @@ To reproduce the results on LFT, the following training command can be used:
 $ python3 experiment_runner.py --number 2 --dataset lft --embeddings wikipedia,crawl,character --lms hamburger_anzeiger --runs 3
 ```
 
+# Released models
+
+We release models trained on the ONB (1710-1873) and the LFT (1926) datasets.
+All models are trained with the latest version of Flair.
+
+| Model                                                                                | Sha256                                                             | F-Score on test set
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------ | ------------------
+| [ONB† (version 1.0)](https://schweter.eu/cloud/historic-ner/de-historic-onb-v0.1.pt) | `ca1e644bda23ef715652a2573983a7e4e801bcaf7d1de21baa4d92ba6551ffcf` | 86.37
+| [LFT† (version 1.0)](https://schweter.eu/cloud/historic-ner/de-historic-lft-v0.1.pt) | `a67b405f439bf613be1ea6e9d1fa4b951b5149c2e48055af09192ee24a8dab91` | 77.32
+
+† We use own trained Flair Embeddings (Hamburger Anzeiger or Wiener Zeitung),
+word embeddings trained with FastText both on Wikipedia and Common Crawl, and
+character embeddings.
+
 # TODOs
 
 * [x] Include training script
