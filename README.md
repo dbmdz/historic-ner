@@ -441,10 +441,167 @@ approaches could be effective with proper hyperparameter tunings:
     state-of-the-art result. We assume that training a ELMo Transformer model
     for more epochs would lead to better results.
 
+# Experiments
+
+## Data
+
+More information about obtaining and using the LFT and ONB datasets can be found
+in [this README](./data/README.md).
+
+## Runner
+
+We ship an experiment runner script, that was used for training several models.
+Just run:
+
+```bash
+$ python3 experiment_runner.py --help                                                                                                                                    [10:15:59]
+Usage: experiment_runner.py [OPTIONS]
+
+Options:
+  --number INTEGER   Define experiment number
+  --dataset TEXT     Define dataset
+  --embeddings TEXT  Comma separated list of embedding types
+  --lms TEXT         Comma separated list of language models
+  --runs INTEGER     Define number of runs
+  --help             Show this message and exit.
+```
+
+With the `--number` argument you should define a unique id for your experiment.
+For the `--dataset` option, only `lft` and `onb` can be used as valid arguments.
+
+The following embeddings can be used with the `--embeddings` parameter:
+
+* `wikipedia` - Embeddings trained with FastText on German Wikipedia
+* `crawl` - Embeddings trained with FastText on Common Crawl data
+* `character` - Character Embeddings as proposed by [Lample et al., 2016a](http://aclweb.org/anthology/N16-1030)
+
+It is also possible to combine several embeddings as a comma separated list like
+`wikipedia,crawl,character`.
+
+The following language models can be used with the `--lms` parameter:
+
+* `de` - German Flair Embeddings
+* `hamburger_anzeiger` - Our trained Flair Embeddings on the Hamburger Anzeiger
+  (HHA) corpus
+* `wiener_zeitung` - Our trained Flair Embeddings on the Wiener Zeitung corpus
+* `bert` - Specify a BERT model and its to be used layers
+
+An example argument for using a BERT model would be 
+`bert-base-multilingual-cased_-4;-3;-2;-1`. This uses the cased multi-lingual
+BERT model with the last four layers. Layers can be specified as a `;`-separated
+list. It is also possible to use own trained BERT models.
+
+The number of `--runs` is set to 3 by default. Thus, the script will train
+a NER model three times.
+
+## Evaluation
+
+After training a NER model, the evaluation should be done with the official
+CoNLL-2003 script. Our `predict.py` script loads a trained NER model and outputs
+a CoNLL-2003 compatible prediction format. This script also converts the IOBES
+tagging scheme into an IOB format that is supported by the CoNLL-2003 evaluation
+script.
+
+In the first step, the official CoNLL-2003 evaluation script must be downloaded:
+
+```bash
+$ wget https://www.clips.uantwerpen.be/conll2002/ner/bin/conlleval.txt
+```
+
+The `predict.py` script comes with the following arguments:
+
+```bash
+$ python3 predict.py --help
+Usage: predict.py [OPTIONS]
+
+Options:
+  --dataset TEXT  Define dataset
+  --model PATH
+  --help
+```
+
+For the `--dataset` option, only `lft` and `onb` can be used as valid arguments.
+A previously trained NER model is passed to the `--model` option. The following
+example command shows prediction and evaluation on a specific dataset:
+
+```bash
+$ python3 predict.py --dataset onb --model resources/taggers/experiment_1_2/best-model.pt | perl conlleval.txt
+processed 3781 tokens with 394 phrases; found: 377 phrases; correct: 333.
+accuracy:  97.54%; precision:  88.33%; recall:  84.52%; FB1:  86.38
+              LOC: precision:  91.24%; recall:  90.31%; FB1:  90.77  194
+              ORG: precision: 100.00%; recall:  62.50%; FB1:  76.92  5
+              PER: precision:  84.83%; recall:  79.47%; FB1:  82.07  178
+```
+
+## Paper results
+
+### ONB
+
+The following training command can be used to reproduce our results on the
+ONB dataset:
+
+```bash
+$ python3 experiment_runner.py --number 1 --dataset onb --embeddings wikipedia,crawl,character --lms wiener_zeitung --runs 3
+```
+
+### LFT
+
+To reproduce the results on LFT, the following training command can be used:
+
+```bash
+$ python3 experiment_runner.py --number 2 --dataset lft --embeddings wikipedia,crawl,character --lms hamburger_anzeiger --runs 3
+```
+
+# Released models
+
+We release models trained on the ONB (1710-1873) and the LFT (1926) datasets.
+All models are trained with the latest version of Flair.
+
+| Model                                                                                | Sha256                                                             | F-Score on test set
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------ | ------------------
+| [ONB† (version 1.0)](https://schweter.eu/cloud/historic-ner/de-historic-onb-v0.1.pt) | `ca1e644bda23ef715652a2573983a7e4e801bcaf7d1de21baa4d92ba6551ffcf` | 86.37
+| [LFT† (version 1.0)](https://schweter.eu/cloud/historic-ner/de-historic-lft-v0.1.pt) | `a67b405f439bf613be1ea6e9d1fa4b951b5149c2e48055af09192ee24a8dab91` | 77.32
+
+† We use own trained Flair Embeddings (Hamburger Anzeiger or Wiener Zeitung),
+word embeddings trained with FastText both on Wikipedia and Common Crawl, and
+character embeddings.
+
+# Example usage
+
+This sections shows how to use one of our trained models with Flair in order to
+perform NER on a sentence.
+
+First, our trained NER model on the ONB dataset must be downloaded:
+
+```bash
+$ wget https://schweter.eu/cloud/historic-ner/de-historic-onb-v0.1.pt
+```
+
+Then you can use the following code to perform NER:
+
+```python
+from flair.data import Sentence
+from flair.models import SequenceTagger
+
+# Noisy OCR :)
+sentence = Sentence("April Martin Ansclm , K. Gefan - gen-Auffehers Georg Sausgruber .")
+
+tagger: SequenceTagger = SequenceTagger.load("de-historic-onb-v0.1.pt")
+tagger.predict(sentence)
+
+sentence.to_tagged_string()
+```
+
+This outputs:
+
+```python
+'April Martin <B-PER> Ansclm <E-PER> , K. Gefan - gen-Auffehers Georg <B-PER> Sausgruber <E-PER> .'
+```
+
 # TODOs
 
-* [ ] Include training script
-* [ ] Show how to use our trained language models with *Flair*
+* [x] Include training script
+* [x] Show how to use our trained language models with *Flair*
 * [ ] Add BibTeX entry
 * [x] Add link to arXiv pre-print
 
