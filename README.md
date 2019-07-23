@@ -566,10 +566,42 @@ All models are trained with the latest version of Flair.
 word embeddings trained with FastText both on Wikipedia and Common Crawl, and
 character embeddings.
 
+# Example usage
+
+This sections shows how to use one of our trained models with Flair in order to
+perform NER on a sentence.
+
+First, our trained NER model on the ONB dataset must be downloaded:
+
+```bash
+$ wget https://schweter.eu/cloud/historic-ner/de-historic-onb-v0.1.pt
+```
+
+Then you can use the following code to perform NER:
+
+```python
+from flair.data import Sentence
+from flair.models import SequenceTagger
+
+# Noisy OCR :)
+sentence = Sentence("April Martin Ansclm , K. Gefan - gen-Auffehers Georg Sausgruber .")
+
+tagger: SequenceTagger = SequenceTagger.load("de-historic-onb-v0.1.pt")
+tagger.predict(sentence)
+
+sentence.to_tagged_string()
+```
+
+This outputs:
+
+```python
+'April Martin <B-PER> Ansclm <E-PER> , K. Gefan - gen-Auffehers Georg <B-PER> Sausgruber <E-PER> .'
+```
+
 # TODOs
 
 * [x] Include training script
-* [ ] Show how to use our trained language models with *Flair*
+* [x] Show how to use our trained language models with *Flair*
 * [ ] Add BibTeX entry
 * [x] Add link to arXiv pre-print
 
