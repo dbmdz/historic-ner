@@ -598,12 +598,14 @@ This outputs:
 'April Martin <B-PER> Ansclm <E-PER> , K. Gefan - gen-Auffehers Georg <B-PER> Sausgruber <E-PER> .'
 ```
 
+# Further Experiments
+
+Newer experiments (that were not covered in our paper) can be found
+[here](./EXPERIMENTS.md).
+
 # TODOs
 
-* [x] Include training script
-* [x] Show how to use our trained language models with *Flair*
 * [ ] Add BibTeX entry
-* [x] Add link to arXiv pre-print
 
 # Citing
 
