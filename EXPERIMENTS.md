@@ -42,3 +42,26 @@ size of 300. Thus, the network size is smaller and the F-Score performance is
 not negatively affected! The file size of the trained NER model decreases from
 2.7 GB to only 424 MB! Training time will also decrease from 48 minutes to
 26 minutes.
+
+### LFT dataset
+
+The current SOTA on the LFT dataset is 77.51 (reported in our paper).
+The following table shows experiments and F-Scores with Subword embeddings
+and different merge operations:
+
+| Merge operations | Run 1 | Run 2 | Run 3 | Avg. runs
+| ---------------- | ----- | ----- | ----- | ---------
+|   1,000          | 75.84 | 74.66 | 75.23 | 75.24
+|   3,000          | 75.02 | 75.72 | 76.10 | 75.61
+|   5,000          | 75.46 | 75.25 | 76.58 | 75.76
+|  10,000          | 75.73 | 75.46 | 76.20 | 75.80
+|  25,000          | 74.48 | 75.31 | 76.42 | 75.40
+|  50,000          | 76.34 | 75.87 | 76.66 | 76.29
+| 100,000          | 75.96 | 77.72 | 76.79 | **76.82**
+| 200,000          | 75.43 | 76.09 | 75.70 | 75.74
+
+Subword embeddings with 100,000 merge operations achieve an averaged F-Score
+of 76.82 with is -0.69 worse than our reported result (77.51) in our paper.
+
+The model size shrinks from 2.7GB to 424MB using Subword embeddings, and the
+training time decreases from 2 hours to only 1 hour.
