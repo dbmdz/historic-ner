@@ -598,14 +598,28 @@ This outputs:
 'April Martin <B-PER> Ansclm <E-PER> , K. Gefan - gen-Auffehers Georg <B-PER> Sausgruber <E-PER> .'
 ```
 
-# TODOs
+# Further Experiments
 
-* [x] Include training script
-* [x] Show how to use our trained language models with *Flair*
-* [ ] Add BibTeX entry
-* [x] Add link to arXiv pre-print
+Newer experiments (that were not covered in our paper) can be found
+[here](./EXPERIMENTS.md).
 
 # Citing
 
 If you use our trained language models or results in your research, please use
-the following *BibTeX* entry (coming very soon).
+the following *BibTeX* entry:
+
+```bibtex
+@inproceedings{schweter-baiter-2019-towards,
+    title = "Towards Robust Named Entity Recognition for Historic {G}erman",
+    author = "Schweter, Stefan  and
+      Baiter, Johannes",
+    booktitle = "Proceedings of the 4th Workshop on Representation Learning for NLP (RepL4NLP-2019)",
+    month = aug,
+    year = "2019",
+    address = "Florence, Italy",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/W19-4312",
+    pages = "96--103",
+    abstract = "In this paper we study the influence of using language model pre-training for named entity recognition for Historic German. We achieve new state-of-the-art results using carefully chosen training data for language models. For a low-resource domain like named entity recognition for Historic German, language model pre-training can be a strong competitor to CRF-only methods. We show that language model pre-training can be more effective than using transfer-learning with labeled datasets. Furthermore, we introduce a new language model pre-training objective, synthetic masked language model pre-training (SMLM), that allows a transfer from one domain (contemporary texts) to another domain (historical texts) by using only the same (character) vocabulary. Results show that using SMLM can achieve comparable results for Historic named entity recognition, even when they are only trained on contemporary texts. Our pre-trained character-based language models improve upon classical CRF-based methods and previous work on Bi-LSTMs by boosting F1 score performance by up to 6{\%}.",
+}
+```
