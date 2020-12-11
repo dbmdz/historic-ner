@@ -11,7 +11,7 @@ Paper is available [here](https://www.aclweb.org/anthology/W19-4312/).
 
 * 11.12.2020: Minor refactoring of experiment script (compatible with Flair 0.7). Pre-trained model releases,
               available from Hugging Face model hub: [ONB](https://huggingface.co/dbmdz/flair-historic-ner-onb)
-              and [LFT](https://huggingface.co/dbmdz/flair-historic-ner-onb).
+              and [LFT](https://huggingface.co/dbmdz/flair-historic-ner-lft).
 * 23.07.2019: Initial version.
 
 
