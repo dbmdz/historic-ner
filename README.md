@@ -5,7 +5,7 @@ This repository contains all code and data for the
 accepted at [4th Workshop on Representation Learning for NLP](https://sites.google.com/view/repl4nlp2019/accepted-papers)
 (RepL4NLP) at ACL 2019. 
 
-Pre-print is available [here](https://arxiv.org/abs/1906.07592).
+Paper is available [here](https://www.aclweb.org/anthology/W19-4312/).
 
 # Abstract
 
