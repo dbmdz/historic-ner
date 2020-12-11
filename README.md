@@ -7,6 +7,14 @@ accepted at [4th Workshop on Representation Learning for NLP](https://sites.goog
 
 Paper is available [here](https://www.aclweb.org/anthology/W19-4312/).
 
+# Changelog
+
+* 11.12.2020: Minor refactoring of experiment script (compatible with Flair 0.7). Pre-trained model releases,
+              available from Hugging Face model hub: [ONB](https://huggingface.co/dbmdz/flair-historic-ner-onb)
+              and [LFT](https://huggingface.co/dbmdz/flair-historic-ner-onb).
+* 23.07.2019: Initial version.
+
+
 # Abstract
 
 Recent advances in language modeling using deep neural networks have shown that
