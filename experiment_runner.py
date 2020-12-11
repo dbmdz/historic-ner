@@ -11,6 +11,7 @@ from flair.embeddings import (
     CharacterEmbeddings,
     BertEmbeddings,
     FlairEmbeddings,
+    BytePairEmbeddings,
 )
 from flair import logger
 from flair.models import SequenceTagger
@@ -96,7 +97,7 @@ def parse_arguments(number, dataset, embeddings, lms, runs):
         elif embedding == "crawl":
             logger.info("Using CommonCrawl FastText embeddings")
             embedding_types.append(WordEmbeddings("de-crawl"))
-        elif embedding_types == "crawl_subword":
+        elif embedding == "crawl_subword":
             model = FastText.load_fasttext_format("cc.de.300")
             word_vectors = model.wv
 
@@ -107,6 +108,9 @@ def parse_arguments(number, dataset, embeddings, lms, runs):
                 "Using CommonCrawl FastText embeddings with subword information"
             )
             embedding_types.append(WordEmbeddings("cc.de.300.vec.gensim"))
+        elif embedding == "bpe":
+            logger.info("Using German BPEmbeddings with 100k vocab and 300 dims")
+            embedding_types.append(BytePairEmbeddings(language="de", dim=300))
         else:
             logger.error(
                 f"Embedding name {embedding} not recognized! Please check your input!"

@@ -5,7 +5,15 @@ This repository contains all code and data for the
 accepted at [4th Workshop on Representation Learning for NLP](https://sites.google.com/view/repl4nlp2019/accepted-papers)
 (RepL4NLP) at ACL 2019. 
 
-Pre-print is available [here](https://arxiv.org/abs/1906.07592).
+Paper is available [here](https://www.aclweb.org/anthology/W19-4312/).
+
+# Changelog
+
+* 11.12.2020: Minor refactoring of experiment script (compatible with Flair 0.7). Pre-trained model releases,
+              available from Hugging Face model hub: [ONB](https://huggingface.co/dbmdz/flair-historic-ner-onb)
+              and [LFT](https://huggingface.co/dbmdz/flair-historic-ner-lft).
+* 23.07.2019: Initial version.
+
 
 # Abstract
 
@@ -557,25 +565,61 @@ $ python3 experiment_runner.py --number 2 --dataset lft --embeddings wikipedia,c
 We release models trained on the ONB (1710-1873) and the LFT (1926) datasets.
 All models are trained with the latest version of Flair.
 
-| Model                                                                                | Sha256                                                             | F-Score on test set
-| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------ | ------------------
-| [ONB† (version 1.0)](https://schweter.eu/cloud/historic-ner/de-historic-onb-v0.1.pt) | `ca1e644bda23ef715652a2573983a7e4e801bcaf7d1de21baa4d92ba6551ffcf` | 86.37
-| [LFT† (version 1.0)](https://schweter.eu/cloud/historic-ner/de-historic-lft-v0.1.pt) | `a67b405f439bf613be1ea6e9d1fa4b951b5149c2e48055af09192ee24a8dab91` | 77.32
+**Note:** We use BPEmbeddings instead of the combination of Wikipedia, Common Crawl and character embeddings (as used in the paper),
+so save space and training/inferencing time.
 
-† We use own trained Flair Embeddings (Hamburger Anzeiger or Wiener Zeitung),
-word embeddings trained with FastText both on Wikipedia and Common Crawl, and
-character embeddings.
+More details about newer experiments can be found [here](./EXPERIMENTS.md).
+
+## Training
+
+The following training command can be used for training models on the ONB dataset:
+
+```bash
+$ python3 experiment_runner.py --number 1 --dataset onb --embeddings bpe --lms wiener_zeitung --runs 3
+```
+
+Additionally, the following training command can be used for training models on the LFT dataset:
+
+```bash
+$ python3 experiment_runner.py --number 2 --dataset lft --embeddings bpe --lms hamburger_anzeiger --runs 3
+```
+
+## Results
+
+ONB runs have finished:
+
+| Dataset \ Run | Run 1 | Run 2 | Run 3†    | Avg.
+| ------------- | ----- | ----- | --------- | ------------
+| Development   | 86.69 | 86.13 | **87.18** | 86.67
+| Test          | 85.27 | 86.05 | 85.75     | 85.69
+
+Paper reported an averaged F1-score of 85.31.
+
+LFT runs:
+
+| Dataset \ Run | Run 1 | Run 2 | Run 3†    | Avg.
+| ------------- | ----- | ----- | --------- | ------------
+| Development   | 76.32 | 76.13 | **76.36** | 76.27
+| Test          | 77.07 | 77.35 | 77.20     | 77.21
+
+Paper reported an averaged F1-score of 77.51.
+
+† denotes that this model is selected for upload.
+
+## Models
+
+We release our models on the Hugging Face model hub. The following models are available:
+
+| Model                                                  | Model hub page
+| ------------------------------------------------------ | --------------
+| ONB with BPEmb and Wiener Zeitung Flair Embeddings     | [here](https://huggingface.co/dbmdz/flair-historic-ner-onb)
+| LFT with BPEmb and Hamburger Anzeiger Flair Embeddings | [here](https://huggingface.co/dbmdz/flair-historic-ner-lft)
+
 
 # Example usage
 
 This sections shows how to use one of our trained models with Flair in order to
 perform NER on a sentence.
-
-First, our trained NER model on the ONB dataset must be downloaded:
-
-```bash
-$ wget https://schweter.eu/cloud/historic-ner/de-historic-onb-v0.1.pt
-```
 
 Then you can use the following code to perform NER:
 
@@ -586,7 +630,7 @@ from flair.models import SequenceTagger
 # Noisy OCR :)
 sentence = Sentence("April Martin Ansclm , K. Gefan - gen-Auffehers Georg Sausgruber .")
 
-tagger: SequenceTagger = SequenceTagger.load("de-historic-onb-v0.1.pt")
+tagger: SequenceTagger = SequenceTagger.load("dbmdz/flair-historic-ner-onb")
 tagger.predict(sentence)
 
 sentence.to_tagged_string()
@@ -597,11 +641,6 @@ This outputs:
 ```python
 'April Martin <B-PER> Ansclm <E-PER> , K. Gefan - gen-Auffehers Georg <B-PER> Sausgruber <E-PER> .'
 ```
-
-# Further Experiments
-
-Newer experiments (that were not covered in our paper) can be found
-[here](./EXPERIMENTS.md).
 
 # Citing
 
