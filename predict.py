@@ -22,8 +22,9 @@ def iobes_to_iob(tag):
 
 @click.command()
 @click.option("--dataset", type=str, help="Define dataset")
+@click.option("--split", default="test", type=str, help="Defines dataset split (dev or test)")
 @click.option("--model", type=click.Path(exists=True))
-def parse_arguments(dataset, model):
+def parse_arguments(dataset, split, model):
     # Adjust logging level
     logging.getLogger("flair").setLevel(level="ERROR")
 
@@ -50,9 +51,11 @@ def parse_arguments(dataset, model):
 
     tagger: SequenceTagger = SequenceTagger.load(model)
 
-    for test_sentence in corpus.test:
+    dataset_split = corpus.test if split == "test" else corpus.dev
+
+    for test_sentence in dataset_split:
         tokens = test_sentence.tokens
-        gold_tags = [token.tags["ner"].value for token in tokens]
+        gold_tags = [token.get_tag("ner").value for token in tokens]
 
         tagged_sentence = Sentence()
         tagged_sentence.tokens = tokens
@@ -60,7 +63,7 @@ def parse_arguments(dataset, model):
         # Tag sentence with model
         tagger.predict(tagged_sentence)
 
-        predicted_tags = [token.tags["ner"].value for token in tagged_sentence.tokens]
+        predicted_tags = [token.get_tag("ner").value for token in tagged_sentence.tokens]
 
         assert len(tokens) == len(gold_tags)
         assert len(gold_tags) == len(predicted_tags)
